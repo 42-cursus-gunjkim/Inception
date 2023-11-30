@@ -8,8 +8,15 @@
 # this is only for the mysqld standalone daemon
 [mysqld]
 #skip-networking
+user=mysql
+pid-file=/var/run/mysqld/mysqld.pid
+socket=/var/run/mysqld/mysqld.sock
+port=3306
+basedir=/usr
 datadir=/var/lib/mysql
-socket=/var/lib/mysql/mysql.sock
+tmpdir=/tmp
+lc-messages-dir=/usr/share/mysql
+bind-address=0.0.0.0
 
 # Galera-related settings
 [galera]
@@ -23,7 +30,7 @@ socket=/var/lib/mysql/mysql.sock
 #
 # Allow server to accept connections on all interfaces.
 #
-bind-address=0.0.0.0
+#
 #
 # Optional setting
 #wsrep_slave_threads=1

@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:inception
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      DB_NAME: wordpress
+      DB_USER: wpuser
+      DB_PASSWORD: ja164741
+    expose:
+      - 3306
+    networks:
+      - inception
+
+  wordpress:
+    image: wordpress:inception
+    restart: always
+    environment:
+      DB_NAME: wordpress
+      DB_USER: wpuser
+      DB_PASSWORD: ja164741
+    volumes:
+      - wordpress:/var/www/html/wordpress
+    expose:
+      - 9000
+      - 3306
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+
+  nginx: 
+    image: nginx:inception
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - wordpress:/var/www/html/wordpress
+    networks:
+      - inception
+    expose:
+      - 9000
+
+networks:
+  inception:
+    driver: bridge
+
+volumes:
+  db:
+  wordpress:
