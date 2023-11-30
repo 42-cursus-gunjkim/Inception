@@ -1,14 +1,15 @@
 #!/bin/sh
 set -e
 openrc default
-rc-service mariadb setup
-rc-service mariadb start
+mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
+if [ ! -d "/var/lib/mysql/$DB_NAME" ]; then
+    rc-service mariadb setup
+    rc-service mariadb start
+    mysql -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME}; \
+               CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}'; \
+               GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'%' WITH GRANT OPTION; \
+               FLUSH PRIVILEGES;"
+    rc-service mariadb stop
+fi
 
-# wordpress db sql
-mysql -e "CREATE DATABASE IF NOT EXIST $DB_NAME;"
-mysql -e "CREATE USER '$DB_USER'@'%' IDENTIFIED BY '$DB_PASSWORD';"
-mysql -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%' WITH GRANT OPTION;"
-mysql -e "FLUSH PRIVILEGES;"
-
-rc-service mariadb stop
 exec mysqld --user=root

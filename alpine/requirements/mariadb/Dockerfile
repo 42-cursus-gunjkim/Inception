@@ -14,8 +14,6 @@ RUN chmod 644 ./etc/my.cnf.d/mariadb-server.cnf
 
 WORKDIR /tmp
 
-VOLUME ["/var/lib/mysql"]
-
 ENTRYPOINT ["/sbin/tini", "--"]
 
 CMD ["sh", "/tmp/docker_entrypoint.sh"]

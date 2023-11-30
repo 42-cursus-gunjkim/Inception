@@ -5,7 +5,7 @@ services:
     image: mariadb:inception
     restart: always
     volumes:
-      - db:/var/lib/mysql
+      - ./db:/var/lib/mysql
     environment:
       DB_NAME: wordpress
       DB_USER: wpuser
@@ -23,7 +23,7 @@ services:
       DB_USER: wpuser
       DB_PASSWORD: ja164741
     volumes:
-      - wordpress:/var/www/html/wordpress
+      - ./wordpress:/var/www/html/wordpress
     expose:
       - 9000
       - 3306
@@ -38,7 +38,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - wordpress:/var/www/html/wordpress
+      - ./wordpress:/var/www/html/wordpress
     networks:
       - inception
     expose:
@@ -47,7 +47,3 @@ services:
 networks:
   inception:
     driver: bridge
-
-volumes:
-  db:
-  wordpress:
